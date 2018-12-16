@@ -1,6 +1,14 @@
 [![Build Status](https://travis-ci.org/googleapis/api-compiler.svg?branch=master)](https://travis-ci.org/googleapis/api-compiler)
 
-# Brand Destroyer - Google API Compiler
+# Brand Destroyer
+
+# For more details
+
+* Visit Instagram: www.goo.gl/teCZtd 
+
+* To join in our community for more discussion: www.branddestroyer.slack.com
+
+# Google API Compiler
 
 **NOTE**: API Compiler needs Java8 or higher. If you want to use Java7, please
 use the release tag [API Compiler Java7Support](https://github.com/googleapis/api-compiler/tree/Java7Support).
