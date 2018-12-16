@@ -1,0 +1,23 @@
+documentation {
+  rules {
+    selector: "protiary.test.Service.Rpc"
+    description: "1"
+  }
+  pages {
+    name: "overview"
+    content: "overview content"
+    subpages {
+      name: "sub_overview"
+      content: "sub_overview content"
+    }
+  }
+  pages {
+    name: "example"
+    content: "example content"
+  }
+}
+http {
+}
+quota {
+}
+

@@ -1,0 +1,1 @@
+ERROR: http: rules in additional_bindings must not specify a selector

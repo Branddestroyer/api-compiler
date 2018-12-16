@@ -1,0 +1,46 @@
+documentation {
+  rules {
+    selector: "protiary.test"
+    description: "Testing various ways to add deprecation descriptions"
+  }
+  rules {
+    selector: "protiary.test.Service1.Rpc11"
+    description: "A method."
+    deprecation_description: "This method is deprecated."
+  }
+  rules {
+    selector: "protiary.test.Service1.Rpc12"
+    description: "A 2nd method."
+    deprecation_description: "This is a 2nd deprecated method."
+  }
+  rules {
+    selector: "protiary.test.Service1.Rpc13"
+  }
+  rules {
+    selector: "protiary.test.Service1.Rpc14"
+  }
+  rules {
+    selector: "protiary.test.Service2.Rpc21"
+    deprecation_description: "Service2 methods are deprecated!"
+  }
+  rules {
+    selector: "protiary.test.Service2.Rpc22"
+    deprecation_description: "Service2 methods are deprecated!"
+  }
+  rules {
+    selector: "protiary.test.Service2.Rpc23"
+    deprecation_description: "Service2 methods are deprecated!"
+  }
+  rules {
+    selector: "protiary.test.Service2.Rpc24"
+    deprecation_description: "Service2 methods are deprecated!"
+  }
+  pages {
+    name: "Overview"
+  }
+}
+http {
+}
+quota {
+}
+

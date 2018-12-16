@@ -1,0 +1,114 @@
+name: "blob.googleapis.com"
+title: "Blob Service"
+apis {
+  name: "protiary.test.Storage"
+  methods {
+    name: "GetBucket"
+    request_type_url: "type.googleapis.com/protiary.test.BucketName"
+    response_type_url: "type.googleapis.com/protiary.test.Bucket"
+    options {
+      name: "google.protobuf.MethodOptions.deprecated"
+      value {
+        type_url: "type.googleapis.com/google.protobuf.BoolValue"
+        value: "\b\001"
+      }
+    }
+    options {
+      name: "google.api.http"
+      value {
+        type_url: "type.googleapis.com/google.api.HttpRule"
+        value: "\022\024/buckets/{bucket_id}"
+      }
+    }
+  }
+  options {
+    name: "google.protobuf.ServiceOptions.deprecated"
+    value {
+      type_url: "type.googleapis.com/google.protobuf.BoolValue"
+      value: "\b\001"
+    }
+  }
+  version: "v1"
+  source_context {
+    file_name: "annotations.proto"
+  }
+}
+types {
+  name: "protiary.test.BucketName"
+  fields {
+    kind: TYPE_STRING
+    cardinality: CARDINALITY_OPTIONAL
+    number: 1
+    name: "bucket_id"
+    json_name: "bucketId"
+  }
+  fields {
+    kind: TYPE_ENUM
+    cardinality: CARDINALITY_OPTIONAL
+    number: 2
+    name: "e"
+    type_url: "type.googleapis.com/protiary.test.E"
+    json_name: "e"
+  }
+  source_context {
+    file_name: "annotations.proto"
+  }
+}
+types {
+  name: "protiary.test.Bucket"
+  fields {
+    kind: TYPE_MESSAGE
+    cardinality: CARDINALITY_OPTIONAL
+    number: 1
+    name: "bucket_name"
+    type_url: "type.googleapis.com/protiary.test.BucketName"
+    json_name: "bucketName"
+  }
+  source_context {
+    file_name: "annotations.proto"
+  }
+}
+enums {
+  name: "protiary.test.E"
+  enumvalue {
+    name: "ONE"
+  }
+  enumvalue {
+    name: "E_TWO_OF_A_KIND"
+    number: 2
+  }
+  enumvalue {
+    name: "THREE"
+    number: 3
+  }
+  source_context {
+    file_name: "annotations.proto"
+  }
+}
+documentation {
+}
+http {
+  rules {
+    selector: "protiary.test.Storage.GetBucket"
+    get: "/buckets/{bucket_id}"
+  }
+}
+quota {
+}
+authentication {
+}
+usage {
+}
+endpoints {
+  name: "blob.googleapis.com"
+  aliases: "blob.clients6.google.com"
+  aliases: "content-blob.googleapis.com"
+}
+config_version {
+  value: 1
+}
+system_parameters {
+}
+experimental {
+}
+

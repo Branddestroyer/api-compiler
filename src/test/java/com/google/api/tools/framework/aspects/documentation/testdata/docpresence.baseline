@@ -1,0 +1,15 @@
+documentation {
+  rules {
+    selector: "protiary.test.Message"
+    description: "A message."
+  }
+  rules {
+    selector: "protiary.test.Service.Rpc"
+    description: "1"
+  }
+}
+http {
+}
+quota {
+}
+

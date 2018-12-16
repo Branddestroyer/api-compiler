@@ -1,0 +1,36 @@
+documentation {
+}
+usage {
+  rules {
+    selector: "protiary.test.TestService1.Call2"
+    allow_unregistered_calls: true
+  }
+  rules {
+    selector: "protiary.test.TestService1.Call4"
+  }
+  rules {
+    selector: "protiary.test.TestService2.Call1"
+    allow_unregistered_calls: true
+  }
+  rules {
+    selector: "protiary.test.TestService2.Call2"
+    allow_unregistered_calls: true
+  }
+  rules {
+    selector: "protiary.test.TestService2.Call3"
+    allow_unregistered_calls: true
+  }
+  rules {
+    selector: "protiary.test.TestService2.Call4"
+    allow_unregistered_calls: true
+  }
+  rules {
+    selector: "protiary.test.TestService2.Call5"
+    allow_unregistered_calls: true
+  }
+  rules {
+    selector: "protiary.test.TestService2.Call6"
+    allow_unregistered_calls: true
+  }
+}
+

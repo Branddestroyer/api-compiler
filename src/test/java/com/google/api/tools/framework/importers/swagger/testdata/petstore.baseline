@@ -1,0 +1,148 @@
+WARNING: petstore.json: Operation 'get' in path '/pets': Operation does not require an API key; callers may invoke the method without specifying an associated API-consuming project. To enable API key all the SecurityRequirement Objects (https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#security-requirement-object) inside security definition must reference at least one SecurityDefinition of type : 'apiKey'.
+WARNING: petstore.json: Operation 'post' in path '/pets': Operation does not require an API key; callers may invoke the method without specifying an associated API-consuming project. To enable API key all the SecurityRequirement Objects (https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#security-requirement-object) inside security definition must reference at least one SecurityDefinition of type : 'apiKey'.
+WARNING: petstore.json: Operation 'get' in path '/pets/{id}': Operation does not require an API key; callers may invoke the method without specifying an associated API-consuming project. To enable API key all the SecurityRequirement Objects (https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#security-requirement-object) inside security definition must reference at least one SecurityDefinition of type : 'apiKey'.
+WARNING: petstore.json: Operation 'delete' in path '/pets/{id}': Operation does not require an API key; callers may invoke the method without specifying an associated API-consuming project. To enable API key all the SecurityRequirement Objects (https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#security-requirement-object) inside security definition must reference at least one SecurityDefinition of type : 'apiKey'.
+name: "petstore.swagger.io"
+title: "Swagger Petstore"
+apis {
+  name: "1.petstore_swagger_io"
+  methods {
+    name: "FindPets"
+    request_type_url: "type.googleapis.com/namespace.types.FindPetsRequest"
+    response_type_url: "type.googleapis.com/google.protobuf.Value"
+  }
+  methods {
+    name: "AddPet"
+    request_type_url: "type.googleapis.com/namespace.types.AddPetRequest"
+    response_type_url: "type.googleapis.com/google.protobuf.Value"
+  }
+  methods {
+    name: "FindPetById"
+    request_type_url: "type.googleapis.com/namespace.types.FindPetByIdRequest"
+    response_type_url: "type.googleapis.com/google.protobuf.Value"
+  }
+  methods {
+    name: "DeletePet"
+    request_type_url: "type.googleapis.com/namespace.types.DeletePetRequest"
+    response_type_url: "type.googleapis.com/google.protobuf.Value"
+  }
+  version: "1.0.0"
+  source_context {
+    file_name: "petstore.json"
+  }
+}
+types {
+  name: "namespace.types.FindPetsRequest"
+  fields {
+    kind: TYPE_STRING
+    cardinality: CARDINALITY_REPEATED
+    number: 1
+    name: "tags"
+    json_name: "tags"
+  }
+  fields {
+    kind: TYPE_INT32
+    cardinality: CARDINALITY_OPTIONAL
+    number: 2
+    name: "limit"
+    json_name: "limit"
+  }
+  source_context {
+    file_name: "namespace.types"
+  }
+}
+types {
+  name: "namespace.types.AddPetRequest"
+  fields {
+    kind: TYPE_MESSAGE
+    cardinality: CARDINALITY_OPTIONAL
+    number: 1
+    name: "pet"
+    type_url: "type.googleapis.com/google.protobuf.Value"
+    json_name: "pet"
+  }
+  source_context {
+    file_name: "namespace.types"
+  }
+}
+types {
+  name: "namespace.types.FindPetByIdRequest"
+  fields {
+    kind: TYPE_INT64
+    cardinality: CARDINALITY_OPTIONAL
+    number: 1
+    name: "id"
+    json_name: "id"
+  }
+  source_context {
+    file_name: "namespace.types"
+  }
+}
+types {
+  name: "namespace.types.DeletePetRequest"
+  fields {
+    kind: TYPE_INT64
+    cardinality: CARDINALITY_OPTIONAL
+    number: 1
+    name: "id"
+    json_name: "id"
+  }
+  source_context {
+    file_name: "namespace.types"
+  }
+}
+documentation {
+  summary: "A sample API that uses a petstore as an example to demonstrate features in the swagger-2.0 specification"
+}
+http {
+  rules {
+    selector: "1.petstore_swagger_io.FindPets"
+    get: "/v1/api/pets"
+  }
+  rules {
+    selector: "1.petstore_swagger_io.AddPet"
+    post: "/v1/api/pets"
+    body: "pet"
+  }
+  rules {
+    selector: "1.petstore_swagger_io.FindPetById"
+    get: "/v1/api/pets/{id}"
+  }
+  rules {
+    selector: "1.petstore_swagger_io.DeletePet"
+    delete: "/v1/api/pets/{id}"
+  }
+}
+quota {
+}
+authentication {
+}
+usage {
+  rules {
+    selector: "1.petstore_swagger_io.FindPets"
+    allow_unregistered_calls: true
+  }
+  rules {
+    selector: "1.petstore_swagger_io.AddPet"
+    allow_unregistered_calls: true
+  }
+  rules {
+    selector: "1.petstore_swagger_io.FindPetById"
+    allow_unregistered_calls: true
+  }
+  rules {
+    selector: "1.petstore_swagger_io.DeletePet"
+    allow_unregistered_calls: true
+  }
+}
+endpoints {
+  name: "petstore.swagger.io"
+}
+control {
+  environment: "servicecontrol.googleapis.com"
+}
+system_parameters {
+}
+experimental {
+}
+

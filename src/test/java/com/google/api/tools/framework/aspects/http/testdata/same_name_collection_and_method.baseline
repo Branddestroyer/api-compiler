@@ -1,0 +1,29 @@
+documentation {
+}
+http {
+  rules {
+    selector: "protiary.test.TestService.ListBookResource"
+    post: "/v1/test/books"
+  }
+  rules {
+    selector: "protiary.test.TestService.CreateBook"
+    post: "/v1/test/books"
+  }
+  rules {
+    selector: "protiary.test.TestService.ListShelveResource"
+    post: "/v1/test:shelves"
+  }
+  rules {
+    selector: "protiary.test.TestService.CreateShelve"
+    post: "/v1/test/shelves"
+  }
+  rules {
+    selector: "protiary.test.TestService.ListItems"
+    get: "/v1/test/items"
+  }
+  rules {
+    selector: "protiary.test.TestService.CreateItem"
+    post: "/v1/test/items"
+  }
+}
+

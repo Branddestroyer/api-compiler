@@ -1,0 +1,10 @@
+GET GetSummaryResponse /customer:getSummary
+======================================================================
+Rest Kind:   CUSTOM
+Version:  (empty)
+Version with default:  v1
+Simple collection:  customer
+Versioned collection:  customer
+Base collection:  customer
+Custom Name: getSummary
+

@@ -1,0 +1,200 @@
+/*
+ * Copyright (C) 2016 Google, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.google.api.tools.framework.model;
+
+import com.google.api.tools.framework.model.Diag.Kind;
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Maps;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javax.annotation.Nullable;
+
+/** Manages the set of rules for suppressing {@link Kind#WARNING} Diags. */
+public class DiagSuppressor {
+
+  // Regexp to match a suppression directive argument.
+  // TODO(user): Should this pattern be more restrictive?
+  private static final String VALID_RULE_REGEX = "[-_a-z0-9]+";
+  private static final Pattern SUPPRESSION_DIRECTIVE_PATTERN =
+      Pattern.compile(String.format("\\s*(?<aspect>[^-]+)-(?<rule>\\*|%s)", VALID_RULE_REGEX));
+
+  // A map of per-element regexp patterns which characterize suppressed warnings.
+  private final Map<Element, String> suppressions = Maps.newHashMap();
+
+  // Global suppression pattern that is not tied to any Element.
+  // This is useful to check if a warning is suppressed when the caller
+  // does not have an instance of the model and only has instance of Diag and the Location.
+  private Pattern compilerGlobalSuppressionPattern = Pattern.compile("");
+
+  private final DiagCollector diagCollector;
+
+  public DiagSuppressor(DiagCollector diagCollector) {
+    this.diagCollector = Preconditions.checkNotNull(diagCollector, "diagCollector");
+  }
+
+  public DiagCollector getDiagCollector() {
+    return diagCollector;
+  }
+
+  public void suppressAllWarningsUnder(Element element) {
+    addPattern(element, ".*");
+  }
+
+  public void addSuppressionDirective(
+      Element elem, String directive, Iterable<ConfigAspect> configAspects) {
+    // Validate the directive syntax.
+    Matcher matcher = SUPPRESSION_DIRECTIVE_PATTERN.matcher(directive);
+    if (!matcher.matches()) {
+      diagCollector.addDiag(
+          Diag.error(
+              elem.getLocation(),
+              "The warning_suppression '%s' does not match the expected pattern "
+                  + "'<aspect>-<rule>' or '<aspect>-*'.",
+              directive));
+      return;
+    }
+
+    // Get aspect and rule name and search for matching aspect and rule.
+    String aspectName = matcher.group("aspect");
+    String ruleName = matcher.group("rule");
+    List<ConfigAspect> aspectsWithName = new ArrayList<>();
+    for (ConfigAspect aspect : configAspects) {
+      if (aspect.getAspectName().equals(aspectName)) {
+        aspectsWithName.add(aspect);
+      }
+    }
+    if (aspectsWithName.isEmpty()) {
+      diagCollector.addDiag(
+          Diag.error(
+              elem.getLocation(),
+              "The config aspect '%s' used in warning suppression '%s' is unknown.",
+              aspectName,
+              directive));
+      return;
+    }
+    if (!"*".equals(ruleName) && !hasMatchingLinterRule(ruleName, aspectsWithName)) {
+      diagCollector.addDiag(
+          Diag.warning(
+              elem.getLocation(),
+              "The rule '%s' in aspect '%s' used in warning suppression '%s' is unknown.",
+              ruleName,
+              aspectName,
+              directive));
+      return;
+    }
+
+    // Add the suppression pattern.
+    addPattern(elem, suppressionPattern(aspectName, ruleName));
+  }
+
+  private boolean hasMatchingLinterRule(String ruleName, List<ConfigAspect> aspects) {
+    for (ConfigAspect aspect : aspects) {
+      if (aspect.getLintRuleNames().contains(ruleName)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  // Adds a pattern for given element.
+  public void addPattern(Element elem, String pattern) {
+    String elemPattern = suppressions.get(elem);
+    if (elemPattern == null) {
+      elemPattern = pattern;
+    } else {
+      elemPattern = elemPattern + "|(" + pattern + ")";
+    }
+    suppressions.put(elem, elemPattern);
+
+    // Check if suppression is on global model element.
+    if (elem instanceof Model && elemPattern != null) {
+      compilerGlobalSuppressionPattern = Pattern.compile(elemPattern, Pattern.DOTALL);
+    }
+  }
+
+  /**
+   * Adds a user-level suppression directive. The directive must be given in the form 'aspect-rule',
+   * or 'aspect-*' to match any rule. Is used in comments such as '(== suppress_warning http-* ==)'
+   * which will suppress all lint warnings generated by the http aspect.
+   */
+
+  // TODO(user): See if we can avoid the type case.
+  public boolean isDiagSuppressed(Diag diag, Location location) {
+    if (location instanceof ProtoLocation) {
+      if (isSuppressedWarning(diag, ((ProtoLocation) location).getElement())) {
+        return true;
+      }
+    } else if (compilerGlobalSuppressionPattern.matcher(diag.getMessage()).matches()) {
+      return true;
+    }
+
+    return false;
+  }
+
+  /**
+   * Checks whether the given diagnosis is suppressed for the given element. This checks the
+   * suppression pattern for this element and all elements, inserting the model for global
+   * suppressions as a virtual parent. Only Diags of Kind {@link Kind#WARNING} can be suppressed
+   */
+  public boolean isSuppressedWarning(Diag diag, Element elem) {
+    if (diag.getKind() != Diag.Kind.WARNING) {
+      return false;
+    }
+    Element current = elem;
+    while (current != null) {
+      Pattern pattern = getPattern(current);
+      if (pattern != null && pattern.matcher(diag.getMessage()).matches()) {
+        return true;
+      }
+      if (current instanceof Model) {
+        // Top-most parent tried.
+        break;
+      }
+      if (current instanceof ProtoElement) {
+        current = ((ProtoElement) current).getParent();
+      } else {
+        current = null;
+      }
+      if (current == null) {
+        // Insert the model as a virtual parent.
+        current = elem.getModel();
+      }
+    }
+    return false;
+  }
+
+  // Gets a pattern for given element. This compiles the pattern on demand.
+  @Nullable
+  public Pattern getPattern(Element elem) {
+    String source = suppressions.get(elem);
+    if (source == null) {
+      return null;
+    }
+    return Pattern.compile(source, Pattern.DOTALL);
+  }
+
+  // Returns a pattern string to match a style warning with given aspect and rule name.
+  private static String suppressionPattern(String aspectName, String ruleName) {
+    return String.format(
+        "\\(lint\\)\\s*%s-%s:.*",
+        Pattern.quote(aspectName),
+        "*".equals(ruleName) ? VALID_RULE_REGEX : Pattern.quote(ruleName));
+  }
+}

@@ -1,0 +1,2 @@
+ERROR: x-google-invalid-unknown-field.json: x-google-endpoints: Extension x-google-endpoints cannot be converted into proto type google.api.Endpoint. Details: Cannot find field: invalid in message google.api.Endpoint
+Service config creation failed

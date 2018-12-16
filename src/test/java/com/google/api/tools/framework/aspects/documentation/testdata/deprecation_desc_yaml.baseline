@@ -1,0 +1,32 @@
+documentation {
+  rules {
+    selector: "protiary.test"
+    description: "Testing various ways to add deprecation descriptions"
+  }
+  rules {
+    selector: "protiary.test.Service.Rpc1"
+    description: "A method."
+    deprecation_description: "This method is deprecated."
+  }
+  rules {
+    selector: "protiary.test.Service.Rpc2"
+    description: "A 2nd method."
+    deprecation_description: "This is a 2nd deprecated method."
+  }
+  rules {
+    selector: "protiary.test.Service.Rpc3"
+    description: "Rpc3.proto desc"
+  }
+  rules {
+    selector: "protiary.test.Service.Rpc4"
+    deprecation_description: "This is deprecation description for Rpc4 from proto file."
+  }
+  pages {
+    name: "Overview"
+  }
+}
+http {
+}
+quota {
+}
+

@@ -1,0 +1,9 @@
+documentation {
+}
+http {
+  rules {
+    selector: "protiary.test.bad_name_binding.TestService.Call1"
+    post: "/v1/test_something/{J}"
+  }
+}
+

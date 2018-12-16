@@ -1,0 +1,32 @@
+name: "library-example.cloud.goog"
+title: "Google Example Library API"
+apis {
+  name: "v1.library_example_cloud_goog"
+  version: "v1"
+  source_context {
+    file_name: "x-google-endpoints.json"
+  }
+}
+documentation {
+  summary: "A simple Google Example Library API."
+}
+http {
+}
+quota {
+}
+authentication {
+}
+usage {
+}
+endpoints {
+  name: "library-example.cloud.goog"
+  allow_cors: true
+}
+control {
+  environment: "servicecontrol.googleapis.com"
+}
+system_parameters {
+}
+experimental {
+}
+

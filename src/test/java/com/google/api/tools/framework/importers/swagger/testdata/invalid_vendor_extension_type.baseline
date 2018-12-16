@@ -1,0 +1,2 @@
+ERROR: invalid_vendor_extension_type.json: x-google-allow: Extension x-google-allow has invalid type. Valid type is java.lang.String
+Service config creation failed

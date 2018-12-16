@@ -1,0 +1,10 @@
+documentation {
+}
+http {
+  rules {
+    selector: "protiary.test.json_name_ok.TestService.Call1"
+    post: "/v1/test/{J2}"
+    body: "*"
+  }
+}
+
